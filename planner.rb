@@ -21,6 +21,28 @@ module Options
 
         return option
     end
+
+    def self.add
+        puts "What day would you like to create the event for? [dd/mm/yyyy]"
+        date_string = gets.chomp.strip
+        date = Date.parse(date_string)
+    
+        puts "What time would you like the event to start? [hh:mm]"
+        time = gets.chomp.strip
+    
+        puts "What would you like to call this event?"
+        details = gets.chomp.strip
+    
+        puts "Are these the correct details?"
+        puts "Date: #{date}, Time: #{time}, Details: #{details}"
+        confirm = gets.chomp
+        
+        if confirm = 'yes' || confirm = 'y'
+            csvfile = CSV.open('dates.csv', 'a')
+            csvfile << [date, time, details]
+            csvfile.close
+        end
+    end
 end
 
 system("clear")
@@ -42,7 +64,8 @@ while true
 
     case opt
     when '1'
-        
+        system("clear")
+        Options.add
     when '2'
 
     when '3'
