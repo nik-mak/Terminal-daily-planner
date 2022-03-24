@@ -25,7 +25,7 @@ module Options
     def self.add
         puts "What day would you like to create the event for? [dd/mm/yyyy]"
         date_string = gets.chomp.strip
-        date = Date.parse(date_string)
+        date = Date.parse(date_string).to_s
     
         puts "What time would you like the event to start? [hh:mm]"
         time = gets.chomp.strip
@@ -42,6 +42,22 @@ module Options
             csvfile << [date, time, details]
             csvfile.close
         end
+    end
+
+    def self.view
+        array = []
+        puts "What day would you like to view?"
+        view_date_string = gets.chomp.strip
+        view_date = Date.parse(view_date_string).to_s
+    
+        csv = CSV.open('dates.csv', 'r', headers: true)
+        csv.each do |row|
+            if row['Date'] == view_date
+                array << row
+            end 
+        end
+    
+        puts array
     end
 end
 
@@ -69,7 +85,8 @@ while true
     when '2'
 
     when '3'
-       
+       system("clear")
+       Options.view
     when '4'
 
     when '5'
