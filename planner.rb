@@ -91,7 +91,7 @@ puts EventInfo.no_of_events(array)
 EventInfo.list_events(array)
 
 while true
-    option = prompt.select('What would you like to do?', %w(Add Delete View Help Exit), show_help: :always)
+    option = prompt.select('What would you like to do?', %w(Add Delete View Help Exit), show_help: :always, active_color: :yellow)
 
     case option
     when 'Add'
