@@ -2,6 +2,9 @@ require 'csv'
 require 'tty-prompt'
 require 'rainbow'
 
+require_relative('./date_time')
+require_relative('./eventinfo')
+
 prompt = TTY::Prompt.new
 
 def help
@@ -18,61 +21,6 @@ def help
     "
 end
 
-module GetDateTime
-    def self.get_date
-        prompt = TTY::Prompt.new
-        begin
-            date_string = prompt.ask("Please enter a day [dd/mm/yyyy]", required: true)
-            date = Date.parse(date_string).to_s
-        rescue
-            puts Rainbow("Please enter a valid date.").indianred
-            retry
-        end
-        return date
-    end
-
-    def self.get_time
-        prompt = TTY::Prompt.new
-        begin
-            time_string = prompt.ask("Please enter a time? [hh:mm am/pm]", required: true)
-            time_p = DateTime.strptime("#{time_string}", '%I:%M %p')
-            time = time_p.strftime('%I:%M %p')
-        rescue
-            puts Rainbow("Please enter a valid time").indianred
-            retry
-        end
-    end
-
-    def self.today
-        today = Time.now.strftime("%d %m %y")
-        today_date = Date.parse(today).to_s
-        return today_date
-    end
-end
-
-module EventInfo
-    def self.event_array(date)
-        array = []
-        csv = CSV.open('dates.csv', 'r', headers: true)
-        csv.select do |row|
-            if row['Date'] == date
-                array << row.to_h
-            end
-        end
-        return array
-    end
-
-    def self.no_of_events(array)
-        return "You have #{array.length} events!"
-    end
-
-    def self.list_events(array)
-        array.each do |hash|
-            puts Rainbow("You have #{hash["Details"]} at #{hash["Time"]}").burlywood
-        end
-    end
-end
-
 ARGV.each do |arg|
 	if arg == "-h" || arg == "--help"
 		puts help
@@ -85,7 +33,7 @@ puts Rainbow("Hachi v1.0").goldenrod
 puts Rainbow("Today is #{Time.now.strftime("%A, %d of %B")}").goldenrod
 # puts affirmation here
 
-date = GetDateTime.today
+date = DateAndTimes.today
 array = EventInfo.event_array(date)
 puts Rainbow(EventInfo.no_of_events(array)).burlywood
 EventInfo.list_events(array)
@@ -96,8 +44,13 @@ while true
     case option
     when 'Add'
         system("clear") 
-        date = GetDateTime.get_date
-        time = GetDateTime.get_time
+        prompt = TTY::Prompt.new
+        date_string = prompt.ask("Please enter a day [dd/mm/yyyy]", required: true)
+        date = DateAndTimes.get_date(date_string)
+
+        time_string = prompt.ask("Please enter a time? [hh:mm am/pm]", required: true)
+        time = DateAndTimes.get_time(time_string)
+        
         details = prompt.ask("What would you like to call this event?")
     
         puts "Are these the correct details?"
@@ -110,11 +63,7 @@ while true
     when 'Delete'
 
     when 'View'
-        system('clear')
-        date = GetDateTime.get_date
-        array = EventInfo.event_array(date)
-        puts EventInfo.no_of_events(array)
-        EventInfo.list_events(array)
+    
     when 'Help'
         system('clear')
         puts help
