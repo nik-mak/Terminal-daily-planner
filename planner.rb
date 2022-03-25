@@ -13,8 +13,9 @@ def help
     Help:     will show you how to use this app.
     Exit:     will close the planner.
     
-    All dates must be enter in dd/mm/yyyy format.
-    All times must be enter in hh:mm am/pm format."
+    Date can be entered as dd/mm/yyyy or just the days number and the month and year will default to the current mionth and year.
+    All times must be enter in hh:mm am/pm format.
+    "
 end
 
 module GetDateTime
