@@ -1,4 +1,8 @@
 require 'csv'
+require "tty-prompt"
+
+prompt = TTY::Prompt.new
+
 
 class NoInputError < StandardError
     def message
@@ -12,54 +16,6 @@ class InvalidInputError < StandardError
     end
 end
 
-module Options
-    def self.get_option
-        puts "Options: [1. Add, 2. Delete, 3. View, 4. Help, 5. Exit]"
-        option = gets.strip
-        raise(NoInputError) if option.empty?
-        raise(InvalidInputError) if (option !~ (/[1-5]/))
-
-        return option
-    end
-
-    def self.add
-        puts "What day would you like to create the event for? [dd/mm/yyyy]"
-        date_string = gets.chomp.strip
-        date = Date.parse(date_string).to_s
-    
-        puts "What time would you like the event to start? [hh:mm]"
-        time = gets.chomp.strip
-    
-        puts "What would you like to call this event?"
-        details = gets.chomp.strip
-    
-        puts "Are these the correct details?"
-        puts "Date: #{date}, Time: #{time}, Details: #{details}"
-        confirm = gets.chomp
-        
-        if confirm = 'yes' || confirm = 'y'
-            csvfile = CSV.open('dates.csv', 'a')
-            csvfile << [date, time, details]
-            csvfile.close
-        end
-    end
-
-    def self.view
-        array = []
-        puts "What day would you like to view?"
-        view_date_string = gets.chomp.strip
-        view_date = Date.parse(view_date_string).to_s
-    
-        csv = CSV.open('dates.csv', 'r', headers: true)
-        csv.each do |row|
-            if row['Date'] == view_date
-                array << row
-            end 
-        end
-    
-        puts array
-    end
-end
 
 system("clear")
 puts "Melissa v0.1"
@@ -68,28 +24,49 @@ puts "Today is #{Time.now.strftime("%A, %d of %B")}"
 # put todays events here
 
 while true
-    begin
-        opt = Options.get_option
-    rescue NoInputError => e
-        print e.message
-        retry
-    rescue InvalidInputError => e
-        print e.message
-        retry
-    end
 
-    case opt
-    when '1'
-        system("clear")
-        Options.add
-    when '2'
+    option = prompt.select('What would you like to do?', %w(Add Delete View Help Exit))
 
-    when '3'
-       system("clear")
-       Options.view
-    when '4'
+    case option
+    when 'Add'
+        system("clear") 
+        date_string = prompt.ask("What day would you like to create the event for? [dd/mm/yyyy]")
+        date = Date.parse(date_string).to_s
+    
+        time_string = prompt.ask("What time would you like the event to start? [hh:mm AM/PM]")
+        time_p = DateTime.strptime("#{time_string}", '%I:%M %p')
+        time = time_p.strftime('%I:%M %p')
+    
+        details = prompt.ask("What would you like to call this event?")
+    
+        puts "Are these the correct details?"
+        confirm = prompt.yes?("Date: #{date}, Time: #{time}, Details: #{details}")
+        if confirm = 'yes' || confirm = 'y'
+            csvfile = CSV.open('dates.csv', 'a')
+            csvfile << [date, time, details]
+            csvfile.close
+        end
+    when 'Delete'
 
-    when '5'
+    when 'View'
+        array = []
+        view_date_string = prompt.ask("What day would you like to view?")
+        view_date = Date.parse(view_date_string).to_s
+    
+        csv = CSV.open('dates.csv', 'r', headers: true)
+        csv.select do |row|
+            if row['Date'] == view_date
+                array << row.to_h
+            end
+        end
+        puts "You have #{array.length} events on that day!"
+
+        array.each do |hash|
+            puts "You have #{hash["Details"]} at #{hash["Time"]}"
+        end
+    when 'Help'
+
+    when 'Exit'
         return
     end
 end
