@@ -47,7 +47,9 @@ module GetDateTime
         today_date = Date.parse(today).to_s
         return today_date
     end
+end
 
+module EventInfo
     def self.event_array(date)
         array = []
         csv = CSV.open('dates.csv', 'r', headers: true)
@@ -83,9 +85,9 @@ puts "Today is #{Time.now.strftime("%A, %d of %B")}"
 # puts affirmation here
 
 date = GetDateTime.today
-array = GetDateTime.event_array(date)
-puts GetDateTime.no_of_events(array)
-GetDateTime.list_events(array)
+array = EventInfo.event_array(date)
+puts EventInfo.no_of_events(array)
+EventInfo.list_events(array)
 
 while true
     option = prompt.select('What would you like to do?', %w(Add Delete View Help Exit), show_help: :always)
@@ -109,9 +111,9 @@ while true
     when 'View'
         system('clear')
         date = GetDateTime.get_date
-        array = GetDateTime.event_array(date)
-        puts GetDateTime.no_of_events(array)
-        GetDateTime.list_events(array)
+        array = EventInfo.event_array(date)
+        puts EventInfo.no_of_events(array)
+        EventInfo.list_events(array)
     when 'Help'
         system('clear')
         puts help
