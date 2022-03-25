@@ -25,7 +25,7 @@ module GetDateTime
             date_string = prompt.ask("Please enter a day [dd/mm/yyyy]", required: true)
             date = Date.parse(date_string).to_s
         rescue
-            puts "Please enter a valid date."
+            puts Rainbow("Please enter a valid date.").indianred
             retry
         end
         return date
@@ -38,7 +38,7 @@ module GetDateTime
             time_p = DateTime.strptime("#{time_string}", '%I:%M %p')
             time = time_p.strftime('%I:%M %p')
         rescue
-            puts "Please enter a valid time"
+            puts Rainbow("Please enter a valid time").indianred
             retry
         end
     end
@@ -68,7 +68,7 @@ module EventInfo
 
     def self.list_events(array)
         array.each do |hash|
-            puts "You have #{hash["Details"]} at #{hash["Time"]}"
+            puts Rainbow("You have #{hash["Details"]} at #{hash["Time"]}").burlywood
         end
     end
 end
@@ -81,17 +81,17 @@ ARGV.each do |arg|
 end
 
 system("clear")
-puts "Hachi v1.0"
-puts "Today is #{Time.now.strftime("%A, %d of %B")}" 
+puts Rainbow("Hachi v1.0").goldenrod
+puts Rainbow("Today is #{Time.now.strftime("%A, %d of %B")}").goldenrod
 # puts affirmation here
 
 date = GetDateTime.today
 array = EventInfo.event_array(date)
-puts EventInfo.no_of_events(array)
+puts Rainbow(EventInfo.no_of_events(array)).burlywood
 EventInfo.list_events(array)
 
 while true
-    option = prompt.select('What would you like to do?', %w(Add Delete View Help Exit), show_help: :always, active_color: :yellow)
+    option = prompt.select(Rainbow('What would you like to do?').palegoldenrod, %w(Add Delete View Help Exit), show_help: :always, active_color: :yellow)
 
     case option
     when 'Add'
