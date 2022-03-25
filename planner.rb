@@ -5,7 +5,7 @@ require 'rainbow'
 prompt = TTY::Prompt.new
 
 def help
-    return "Melissa is your daily planner right here in your terminal! You can navigate through the options with the arrow keys.
+    return "Hachi is your daily planner right here in your terminal! You can navigate through the options with the arrow keys.
 
     Add:      allows you to add an event you just need to specify what day, what time, and give it a name.
     Delete:   allows you to delete an event.
@@ -78,7 +78,7 @@ ARGV.each do |arg|
 end
 
 system("clear")
-puts "Melissa v1.0"
+puts "Hachi v1.0"
 puts "Today is #{Time.now.strftime("%A, %d of %B")}" 
 # puts affirmation here
 
