@@ -1,4 +1,5 @@
 require 'csv'
+require 'date'
 require 'tty-prompt'
 require 'rainbow'
 
@@ -33,8 +34,8 @@ puts Rainbow("Hachi v1.0").goldenrod
 puts Rainbow("Today is #{Time.now.strftime("%A, %d of %B")}").goldenrod
 # puts affirmation here
 
-date = DateAndTimes.today
-array = EventInfo.event_array(date)
+today_date = DateAndTimes.today
+array = EventInfo.event_array(today_date)
 puts Rainbow(EventInfo.no_of_events(array)).burlywood
 EventInfo.list_events(array)
 
@@ -45,24 +46,49 @@ while true
     when 'Add'
         system("clear") 
         prompt = TTY::Prompt.new
+
+        # get the date from the user
         date_string = prompt.ask("Please enter a day [dd/mm/yyyy]", required: true)
         date = DateAndTimes.get_date(date_string)
 
+        # get the time from the user
         time_string = prompt.ask("Please enter a time? [hh:mm am/pm]", required: true)
         time = DateAndTimes.get_time(time_string)
         
+        # get the details from the user
         details = prompt.ask("What would you like to call this event?")
-    
+
+        # confirm all details of the event with the user
         puts "Are these the correct details?"
         confirm = prompt.yes?("Date: #{date}, Time: #{time}, Details: #{details}")
-        if confirm == 'yes'
+
+        # write the event to the file
+        if confirm == true
             csvfile = CSV.open('dates.csv', 'a')
             csvfile << [date, time, details]
             csvfile.close
+        else
+            puts "too bad"
         end
+
     when 'Delete'
 
     when 'View'
+        array = []
+        date_string = prompt.ask("Please enter a day [dd/mm/yyyy]", required: true)
+        date = DateAndTimes.get_date(date_string)
+        csv = CSV.open('dates.csv', 'r', headers: true)
+        csv.select do |row|
+            if row['Date'] == date
+                array << row.to_h
+            end
+        end
+        
+        puts "You have #{array.length} events!"
+
+        array.each do |hash|
+            puts Rainbow("You have #{hash["Details"]} at #{hash["Time"]}").burlywood
+        end
     
     when 'Help'
         system('clear')

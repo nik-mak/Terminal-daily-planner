@@ -8,6 +8,7 @@ module DateAndTimes
             puts Rainbow("Please enter a valid date.").indianred
             retry
         end
+        return date
     end
 
     def self.get_time(time_string)
@@ -18,6 +19,7 @@ module DateAndTimes
             puts Rainbow("Please enter a valid time").indianred
             retry
         end
+        return time
     end
 
     def self.today
