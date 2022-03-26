@@ -75,17 +75,10 @@ while true
 
         # write the event to the file
         if confirm == true
-            csvfile = CSV.open('dates.csv', 'a')
-            csvfile << [date, time, details]
-            csvfile.close
+            CSV.open('dates.csv', 'a') { |csv| csv << [date, time, details] }
         end
 
     when 'Delete'
-        details = prompt.ask("Which event would you like to delete?")
-
-        table = CSV.table('dates.csv', headers: true)
-        table.by_row!
-        table.delete_if { |row| row[2] == details }
 
     when 'View'
         system('clear')
