@@ -2,23 +2,12 @@ require 'date'
 module DateAndTimes
 
     def self.get_date(date_string)
-        begin
-            date = Date.parse(date_string).to_s
-        rescue
-            puts Rainbow("Please enter a valid date.").indianred
-            retry
-        end
-        return date
+        date = Date.parse(date_string).to_s
     end
 
     def self.get_time(time_string)
-        begin
-            time_p = DateTime.strptime("#{time_string}", '%I:%M %p')
-            time = time_p.strftime('%I:%M %p')
-        rescue
-            puts Rainbow("Please enter a valid time").indianred
-            retry
-        end
+        time_p = DateTime.strptime("#{time_string}", '%k:%M')
+        time = time_p.strftime('%k:%M')
         return time
     end
 

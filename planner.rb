@@ -49,12 +49,22 @@ while true
         prompt = TTY::Prompt.new
 
         # get the date from the user
-        date_string = prompt.ask("Please enter a day [dd/mm/yyyy]", required: true)
-        date = DateAndTimes.get_date(date_string)
+        begin
+            date_string = prompt.ask("Please enter a day [dd/mm/yyyy]", required: true)
+            date = DateAndTimes.get_date(date_string)
+        rescue
+            puts Rainbow("Please enter a valid date.").indianred
+            retry
+        end
 
         # get the time from the user
-        time_string = prompt.ask("Please enter a time? [hh:mm am/pm]", required: true)
-        time = DateAndTimes.get_time(time_string)
+        begin
+            time_string = prompt.ask("Please enter a time? [hh:mm am/pm]", required: true)
+            time = DateAndTimes.get_time(time_string)
+        rescue
+            puts Rainbow("Please enter a valid time").indianred
+            retry
+        end
         
         # get the details from the user
         details = prompt.ask("What would you like to call this event?")
