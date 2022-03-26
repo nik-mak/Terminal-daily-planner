@@ -32,7 +32,8 @@ end
 system("clear")
 puts Rainbow("Hachi v1.0").goldenrod
 puts Rainbow("Today is #{Time.now.strftime("%A, %d of %B")}").goldenrod
-# puts affirmation here
+
+##### put affirmation here
 
 today_date = DateAndTimes.today
 array = EventInfo.event_array(today_date)
@@ -74,22 +75,20 @@ while true
     when 'Delete'
 
     when 'View'
-        array = []
-        date_string = prompt.ask("Please enter a day [dd/mm/yyyy]", required: true)
-        date = DateAndTimes.get_date(date_string)
-        csv = CSV.open('dates.csv', 'r', headers: true)
-        csv.select do |row|
-            if row['Date'] == date
-                array << row.to_h
-            end
-        end
-        
-        puts "You have #{array.length} events!"
+        system('clear')
 
-        array.each do |hash|
-            puts Rainbow("You have #{hash["Details"]} at #{hash["Time"]}").burlywood
-        end
-    
+        # get the date to view
+        date_string = prompt.ask(Rainbow("Please enter a day [dd/mm/yyyy]").khaki, required: true)
+        date = DateAndTimes.get_date(date_string)
+
+        # create array of events for that day
+        array = EventInfo.event_array(date)
+        
+        # display how many events for that day
+        puts EventInfo.no_of_events(array)
+
+        # display events for that day
+        EventInfo.list_events(array)
     when 'Help'
         system('clear')
         puts help
