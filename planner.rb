@@ -71,18 +71,21 @@ while true
 
         # confirm all details of the event with the user
         puts "Are these the correct details?"
-        confirm = prompt.yes?("Date: #{date}, Time: #{time}, Details: #{details}")
+        confirm = prompt.yes?("date: #{date}, time: #{time}, details: #{details}")
 
         # write the event to the file
         if confirm == true
             csvfile = CSV.open('dates.csv', 'a')
             csvfile << [date, time, details]
             csvfile.close
-        else
-            puts "too bad"
         end
 
     when 'Delete'
+        details = prompt.ask("Which event would you like to delete?")
+
+        table = CSV.table('dates.csv', headers: true)
+        table.by_row!
+        table.delete_if { |row| row[2] == details }
 
     when 'View'
         system('clear')

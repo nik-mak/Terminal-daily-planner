@@ -1,4 +1,4 @@
-Date,Time,Details
+date,time,details
 2022-02-14,9:00,test 1
 2022-02-14,10:00,test 2
 2022-02-19,9:00,test3
@@ -30,3 +30,4 @@ Date,Time,Details
 2022-03-27,03:30 PM,Mango
 2022-03-27,06:00,Plum
 2022-03-29,13:00,Lychee
+2022-03-27, 5:30,Carrot

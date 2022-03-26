@@ -4,7 +4,7 @@ module EventInfo
         array = []
         csv = CSV.open('dates.csv', 'r', headers: true)
         csv.select do |row|
-            if row['Date'] == date
+            if row['date'] == date
                 array << row.to_h
             end
         end
@@ -17,7 +17,7 @@ module EventInfo
 
     def self.list_events(array)
         array.each do |hash|
-            puts Rainbow("You have #{hash["Details"]} at #{hash["Time"]}").burlywood
+            puts Rainbow("You have #{hash["details"]} at #{hash["time"]}").burlywood
         end
     end
 end
