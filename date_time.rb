@@ -1,14 +1,13 @@
 require 'date'
 module DateAndTimes
 
-    def self.get_date(date_string)
-        date = Date.parse(date_string).to_s
-        return date
+    def self.get_date(ask_date)
+        return Date.parse(ask_date).to_s
     end
 
-    def self.get_time(time_string)
-        time_p = DateTime.strptime("#{time_string}", '%k:%M')
-        time = time_p.strftime('%k:%M')
+    def self.get_time(ask_time)
+        time_p = DateTime.strptime("#{ask_time}", '%H:%M')
+        time = time_p.strftime('%H:%M')
         return time
     end
 

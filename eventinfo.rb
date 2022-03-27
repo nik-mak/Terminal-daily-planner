@@ -17,7 +17,7 @@ module EventInfo
 
     def self.list_events(array)
         array.each do |hash|
-            puts Rainbow("You have #{hash["details"]} at #{hash["time"]}").burlywood
+            puts Rainbow("You have: #{hash["title"]} at #{hash["time"]}").burlywood
         end
     end
 end

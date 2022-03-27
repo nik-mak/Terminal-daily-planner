@@ -20,7 +20,7 @@ def help
     Exit:     will close the planner.
     
     Date can be entered as dd/mm/yyyy or just the days number and the month and year will default to the current month and year.
-    All times must be enter in hh:mm am/pm format.
+    All times must be entered in 24hr format.
     "
 end
 
@@ -32,17 +32,29 @@ ARGV.each do |arg|
 end
 
 system("clear")
+
+# welcome message
 puts Rainbow("Hachi v1.0").goldenrod
+
+# todays date
 puts Rainbow("Today is #{Time.now.strftime("%A, %d of %B")}").goldenrod
 
+# fetch proverb
 response = HTTParty.get('https://zenquotes.io/api/random')
 result = JSON.parse(response.body)[0]
 puts result["q"] + " - " + result["a"]
 
+# fetch todays date
+today = Time.now.strftime("%d %m %y")
 
-today_date = DateAndTimes.today
+# convert todays date to same format as csv file
+today_date = Date.parse(today).to_s
+
+# create array of todays events
 array = EventInfo.event_array(today_date)
-puts Rainbow(EventInfo.no_of_events(array)).burlywood
+
+# display all events for today
+puts EventInfo.no_of_events(array)
 EventInfo.list_events(array)
 
 while true
@@ -54,8 +66,8 @@ while true
 
         # get the date from the user
         begin
-            date_string = prompt.ask("Please enter a day [dd/mm/yyyy]", required: true)
-            date = DateAndTimes.get_date(date_string)
+            ask_date = prompt.ask("Please enter a day [dd/mm/yyyy]", required: true)
+            date = DateAndTimes.get_date(ask_date)
         rescue
             puts Rainbow("Please enter a valid date.").rebeccapurple
             retry
@@ -63,63 +75,32 @@ while true
 
         # get the time from the user
         begin
-            time_string = prompt.ask("Please enter a time? [hh:mm am/pm]", required: true)
-            time = DateAndTimes.get_time(time_string)
+            ask_time = prompt.ask("Please enter a time? [hh:mm]", required: true)
+            time = DateAndTimes.get_time(ask_time)
         rescue
             puts Rainbow("Please enter a valid time").rebeccapurple
             retry
         end
         
         # get the details from the user
-        details = prompt.ask("What would you like to call this event?")
+        title = prompt.ask("What would you like to call this event?")
 
         # confirm all details of the event with the user
         puts "Are these the correct details?"
-        confirm = prompt.yes?("date: #{date}, time: #{time}, details: #{details}")
+        confirm = prompt.yes?("date: #{date}, time: #{time}, details: #{title}")
 
         # write the event to the file
         if confirm == true
-            CSV.open('dates.csv', 'a') { |csv| csv << [date, time, details] }
+            CSV.open('dates.csv', 'a') { |csv| csv << [date, time, title] }
         end
 
-    when 'Delete'
-
-        # get date
-        begin
-            date_string = prompt.ask("Please enter a day [dd/mm/yyyy]", required: true)
-            date = DateAndTimes.get_date(date_string)
-            # p date
-        rescue
-            puts Rainbow("Please enter a valid date.").rebeccapurple
-            retry
-        end
-
-        # display events for that day
-        array = EventInfo.event_array(date)
-        EventInfo.list_events(array)
-        
-        # get details for the event to be deleted
-        details = prompt.ask("What event would you like to delete?")
-
-        # confirm details
-        puts "Are these the correct details?"
-        confirm = prompt.yes?("Are you sure you want to delete #{details}?")
-
-        # delete event
-        if confirm == true
-            File.open('dates.csv') do |file|
-                table = CSV.parse(file, headers: true)
-                table.delete_if {|row| (row["details"] == details) && (row["date"] == date)}
-                result = File.write('dates.csv', table.to_csv)
-            end
-        end
     when 'View'
         system('clear')
 
-        # get the date to view
+        # get the date from the user
         begin
-            date_string = prompt.ask("Please enter a day [dd/mm/yyyy]", required: true)
-            date = DateAndTimes.get_date(date_string)
+            ask_date = prompt.ask("What day would you like to view? [dd/mm/yyyy]", required: true)
+            date = DateAndTimes.get_date(ask_date)
         rescue
             puts Rainbow("Please enter a valid date.").rebeccapurple
             retry
@@ -133,6 +114,38 @@ while true
 
         # display events for that day
         EventInfo.list_events(array)
+
+    when 'Delete'
+        system('clear')
+
+         # get the date from the user
+         begin
+            ask_date = prompt.ask("Please enter the day for the event you want to delete [dd/mm/yyyy]", required: true)
+            date = DateAndTimes.get_date(ask_date)
+        rescue
+            puts Rainbow("Please enter a valid date.").rebeccapurple
+            retry
+        end
+
+        # display events for that day
+        array = EventInfo.event_array(date)
+        EventInfo.list_events(array)
+        
+        # get details for the event to be deleted
+        title = prompt.ask("What event would you like to delete?")
+
+        # confirm details
+        puts "Are these the correct details?"
+        confirm = prompt.yes?("Are you sure you want to delete: #{title}?")
+
+        # delete event from csv
+        if confirm == true
+            File.open('dates.csv') do |file|
+                table = CSV.parse(file, headers: true)
+                table.delete_if {|row| (row["title"] == title) && (row["date"] == date)}
+                result = File.write('dates.csv', table.to_csv)
+            end
+        end
     when 'Help'
         system('clear')
         puts help
