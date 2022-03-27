@@ -46,16 +46,13 @@ puts result["q"] + " - " + result["a"]
 
 # fetch todays date
 today = Time.now.strftime("%d %m %y")
-
 # convert todays date to same format as csv file
 today_date = Date.parse(today).to_s
-
 # create array of todays events
-array = EventInfo.event_array(today_date)
-
+today_array = EventInfo.event_array(today_date)
 # display all events for today
-puts EventInfo.no_of_events(array)
-EventInfo.list_events(array)
+puts EventInfo.no_of_events(today_array)
+EventInfo.list_events(today_array)
 
 while true
     option = prompt.select(Rainbow('What would you like to do?').palegoldenrod, %w(Add Delete View Help Exit), show_help: :always, active_color: :yellow)
