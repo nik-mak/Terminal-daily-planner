@@ -6,6 +6,10 @@ describe DateAndTimes do
         it 'should return the date' do
             expect(DateAndTimes.get_date('25/03/2022')).to eq '2022-03-25'
         end
+
+        it 'should return an error for invalid date' do
+            expect { DateAndTimes.get_date('AA/BB/2022') }.to raise_error(Date::Error)
+        end
     end
 
     describe '#get_time' do

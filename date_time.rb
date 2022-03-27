@@ -3,6 +3,7 @@ module DateAndTimes
 
     def self.get_date(date_string)
         date = Date.parse(date_string).to_s
+        return date
     end
 
     def self.get_time(time_string)

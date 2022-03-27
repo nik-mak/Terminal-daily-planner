@@ -6,3 +6,5 @@ source "https://rubygems.org"
 
 gem "rspec", "~> 3.11"
 gem "tty", "~> 0.5.0"
+
+gem "httparty", "~> 0.20.0"
