@@ -20,4 +20,12 @@ module EventInfo
             puts Rainbow("You have: #{hash["title"]} at #{hash["time"]}").burlywood
         end
     end
+
+    def self.delete_event(date, title)
+        File.open('dates.csv') do |file|
+            table = CSV.parse(file, headers: true)
+            table.delete_if {|row| (row["title"] == title) && (row["date"] == date)}
+            result = File.write('dates.csv', table.to_csv)
+        end
+    end
 end

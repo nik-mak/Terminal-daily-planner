@@ -137,11 +137,7 @@ while true
 
         # delete event from csv
         if confirm == true
-            File.open('dates.csv') do |file|
-                table = CSV.parse(file, headers: true)
-                table.delete_if {|row| (row["title"] == title) && (row["date"] == date)}
-                result = File.write('dates.csv', table.to_csv)
-            end
+            EventInfo.delete_event(date, title)
         end
     when 'Help'
         system('clear')
