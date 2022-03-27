@@ -84,6 +84,30 @@ while true
 
     when 'Delete'
 
+        begin
+            date_string = prompt.ask("Please enter a day [dd/mm/yyyy]", required: true)
+            date = DateAndTimes.get_date(date_string)
+            # p date
+        rescue
+            puts Rainbow("Please enter a valid date.").rebeccapurple
+            retry
+        end
+
+        array = EventInfo.event_array(date)
+        EventInfo.list_events(array)
+        
+        details = prompt.ask("What event would you like to delete?")
+
+        puts "Are these the correct details?"
+        confirm = prompt.yes?("Are you sure you want to delete #{details}?")
+
+        if confirm == true
+            File.open('dates.csv') do |file|
+                table = CSV.parse(file, headers: true)
+                table.delete_if {|row| (row["details"] == details) && (row["date"] == date)}
+                result = File.write('dates.csv', table.to_csv)
+            end
+        end
     when 'View'
         system('clear')
 
