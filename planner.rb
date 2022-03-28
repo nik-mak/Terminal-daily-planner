@@ -28,15 +28,13 @@ def help
 end
 
 ARGV.each do |arg|
-  if arg == "-h" || arg == "--help"
-    puts help
-  end
+  arg.include?('-h') ? (return puts help) : next
 end
 
 system('clear')
 
 # welcome message
-puts Rainbow("Hachi v1.0").goldenrod
+puts Rainbow('Hachi v1.0').goldenrod
 
 # todays date
 puts Rainbow("Today is #{Time.now.strftime('%A, %d of %B')}").goldenrod
@@ -67,8 +65,7 @@ loop do
 
     # get the date from the user
     begin
-      ask_date = prompt.ask(Rainbow('Please enter a day [dd/mm/yyyy]').orange, required: true)
-      date = DateAndTimes.get_date(ask_date)
+      date = DateAndTimes.get_date(prompt.ask(Rainbow('Please enter a day [dd/mm/yyyy]').orange, required: true))
     rescue Date::Error
       puts Rainbow('Please enter a valid date.').rebeccapurple
       retry
@@ -76,8 +73,7 @@ loop do
 
     # get the time from the user
     begin
-      ask_time = prompt.ask(Rainbow('Please enter a time? [hh:mm]').orange, required: true)
-      time = DateAndTimes.get_time(ask_time)
+      time = DateAndTimes.get_time(prompt.ask(Rainbow('Please enter a time? [hh:mm]').orange, required: true))
     rescue Date::Error
       puts Rainbow('Please enter a valid time').rebeccapurple
       retry
@@ -105,8 +101,7 @@ loop do
     case view
     when 'Day'
       begin
-        ask_date = prompt.ask(Rainbow('What day would you like to view? [dd/mm/yyyy]').orange, required: true)
-        date = DateAndTimes.get_date(ask_date)
+        date = DateAndTimes.get_date(prompt.ask(Rainbow('What day would you like to view? [dd/mm/yyyy]').orange, required: true))
       rescue Date::Error
         puts Rainbow('Please enter a valid date.').rebeccapurple
         retry
@@ -134,8 +129,7 @@ loop do
 
     # get the date from the user
     begin
-      ask_date = prompt.ask(Rainbow('What day would you like to view? [dd/mm/yyyy]').orange, required: true)
-      date = DateAndTimes.get_date(ask_date)
+      date = DateAndTimes.get_date(prompt.ask(Rainbow('What day would you like to view? [dd/mm/yyyy]').orange, required: true))
     rescue Date::Error
       puts Rainbow('Please enter a valid date.').rebeccapurple
       retry
@@ -154,10 +148,9 @@ loop do
 
     # get the date from the user
     begin
-      ask_date = prompt.ask(Rainbow('Please enter the day for the event you want to delete [dd/mm/yyyy]').orange,
-                            required: true)
-      date = DateAndTimes.get_date(ask_date)
-    rescue
+      date = DateAndTimes.get_date(prompt.ask(Rainbow('Enter the date of the event to delete [dd/mm/yyyy]').orange,
+                                              required: true))
+    rescue Date::Error
       puts Rainbow('Please enter a valid date.').rebeccapurple
       retry
     end
