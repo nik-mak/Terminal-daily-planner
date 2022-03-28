@@ -89,22 +89,8 @@ while true
         # write the event to the file
         if confirm == true
             CSV.open('dates.csv', 'a') { |csv| csv << [date, time, title] }
-            
-            rows = []
-            CSV.foreach('dates.csv', headers: true) do |row|
-                rows << row.to_h
-            end
-
-            rows.sort_by! { |row| row['time'] }
-
-            CSV.open("dates.csv", "w") do |csv|
-                csv << rows.first.keys
-                rows.each do |hash|
-                  csv << hash.values
-                end
-            end
+            EventInfo.sort_csv
         end
-
     when 'View'
         system('clear')
 

@@ -28,4 +28,20 @@ module EventInfo
             result = File.write('dates.csv', table.to_csv)
         end
     end
+
+    def self.sort_csv
+        rows = []
+        CSV.foreach('dates.csv', headers: true) do |row|
+            rows << row.to_h
+        end
+
+        rows.sort_by! { |row| row['time'] }
+
+        CSV.open("dates.csv", "w") do |csv|
+            csv << rows.first.keys
+            rows.each do |hash|
+                csv << hash.values
+            end
+        end
+    end
 end
