@@ -55,7 +55,7 @@ puts EventInfo.no_of_events(today_array)
 EventInfo.list_events(today_array)
 
 while true
-    option = prompt.select(Rainbow('What would you like to do?').palegoldenrod, %w(Add Delete View Help Exit), show_help: :always, active_color: :yellow)
+    option = prompt.select(Rainbow('What would you like to do?').palegoldenrod, %w(Add View Delete Help Exit), show_help: :always, active_color: :yellow)
 
     case option
     when 'Add'
@@ -89,6 +89,20 @@ while true
         # write the event to the file
         if confirm == true
             CSV.open('dates.csv', 'a') { |csv| csv << [date, time, title] }
+            
+            rows = []
+            CSV.foreach('dates.csv', headers: true) do |row|
+                rows << row.to_h
+            end
+
+            rows.sort_by! { |row| row['time'] }
+
+            CSV.open("dates.csv", "w") do |csv|
+                csv << rows.first.keys
+                rows.each do |hash|
+                  csv << hash.values
+                end
+            end
         end
 
     when 'View'
@@ -115,8 +129,8 @@ while true
     when 'Delete'
         system('clear')
 
-         # get the date from the user
-         begin
+        # get the date from the user
+        begin
             ask_date = prompt.ask("Please enter the day for the event you want to delete [dd/mm/yyyy]", required: true)
             date = DateAndTimes.get_date(ask_date)
         rescue
