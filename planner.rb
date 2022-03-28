@@ -7,6 +7,7 @@ require 'tty-prompt'
 require 'rainbow'
 require 'httparty'
 
+# files
 require_relative('./date_time')
 require_relative('./eventinfo')
 
@@ -96,7 +97,7 @@ while true
     when 'View'
         system('clear')
 
-        view = prompt.select('What would you like to view?', %w(Day Event), show_help: :always, active_colour: :yellow)
+        view = prompt.select(Rainbow('What would you like to view?').palegoldenrod, %w(Day Event), show_help: :always, active_color: :yellow)
 
         if view == 'Day'
             begin
@@ -159,17 +160,22 @@ while true
         # display events for that day
         array = EventInfo.date_event_array(date)
         EventInfo.list_events(array)
-        
-        # get details for the event to be deleted
-        title = prompt.ask(Rainbow("What event would you like to delete?").orange)
 
-        # confirm details
-        puts Rainbow("Are these the correct details?").blanchedalmond
-        confirm = prompt.yes?(Rainbow("Are you sure you want to delete: #{title}?").wheat)
 
-        # delete event from csv
-        if confirm == true
-            EventInfo.delete_event(date, title)
+        if array.length == 0
+            next
+        else
+            # get details for the event to be deleted
+            title = prompt.ask(Rainbow("What event would you like to delete?").orange)
+
+            # confirm details
+            puts Rainbow("Are these the correct details?").blanchedalmond
+            confirm = prompt.yes?(Rainbow("Are you sure you want to delete: #{title}?").wheat)
+
+            # delete event from csv
+            if confirm == true
+                EventInfo.delete_event(date, title)
+            end
         end
     when 'Help'
         system('clear')

@@ -8,7 +8,12 @@ module EventInfo
                 array << row.to_h
             end
         end
-        return array
+        if array.length == 0
+            puts Rainbow("There are no events.").rebeccapurple
+            return array
+        else
+            return array
+        end
     end
 
     def self.name_event_array(name)
@@ -19,7 +24,12 @@ module EventInfo
                 array << row.to_h
             end
         end
-        return array
+        if array.length == 0
+            puts Rainbow("There are no events with that name.").rebeccapurple
+            return array
+        else
+            return array
+        end
     end
 
     def self.no_of_events(array)
