@@ -39,11 +39,6 @@ puts Rainbow("Hachi v1.0").goldenrod
 # todays date
 puts Rainbow("Today is #{Time.now.strftime("%A, %d of %B")}").goldenrod
 
-# fetch proverb
-response = HTTParty.get('https://zenquotes.io/api/random')
-result = JSON.parse(response.body)[0]
-puts result["q"] + " - " + result["a"]
-
 # fetch todays date
 today = Time.now.strftime("%d %m %y")
 # convert todays date to same format as csv file
@@ -54,6 +49,11 @@ today_array = EventInfo.event_array(today_date)
 puts EventInfo.no_of_events(today_array)
 EventInfo.list_events(today_array)
 
+# fetch proverb
+response = HTTParty.get('https://zenquotes.io/api/random')
+result = JSON.parse(response.body)[0]
+puts Rainbow(result["q"] + " - " + result["a"]).lightcoral
+
 while true
     option = prompt.select(Rainbow('What would you like to do?').palegoldenrod, %w(Add View Delete Help Exit), show_help: :always, active_color: :yellow)
 
@@ -63,7 +63,7 @@ while true
 
         # get the date from the user
         begin
-            ask_date = prompt.ask("Please enter a day [dd/mm/yyyy]", required: true)
+            ask_date = prompt.ask(Rainbow("Please enter a day [dd/mm/yyyy]").orange, required: true)
             date = DateAndTimes.get_date(ask_date)
         rescue
             puts Rainbow("Please enter a valid date.").rebeccapurple
@@ -72,7 +72,7 @@ while true
 
         # get the time from the user
         begin
-            ask_time = prompt.ask("Please enter a time? [hh:mm]", required: true)
+            ask_time = prompt.ask(Rainbow("Please enter a time? [hh:mm]").orange, required: true)
             time = DateAndTimes.get_time(ask_time)
         rescue
             puts Rainbow("Please enter a valid time").rebeccapurple
@@ -80,11 +80,11 @@ while true
         end
         
         # get the details from the user
-        title = prompt.ask("What would you like to call this event?")
+        title = prompt.ask(Rainbow("What would you like to call this event?").orange)
 
         # confirm all details of the event with the user
-        puts "Are these the correct details?"
-        confirm = prompt.yes?("date: #{date}, time: #{time}, details: #{title}")
+        puts Rainbow("Are these the correct details?").blanchedalmond
+        confirm = prompt.yes?(Rainbow("date: #{date}, time: #{time}, details: #{title}").wheat)
 
         # write the event to the file
         if confirm == true
@@ -110,7 +110,7 @@ while true
 
         # get the date from the user
         begin
-            ask_date = prompt.ask("What day would you like to view? [dd/mm/yyyy]", required: true)
+            ask_date = prompt.ask(Rainbow("What day would you like to view? [dd/mm/yyyy]").orange, required: true)
             date = DateAndTimes.get_date(ask_date)
         rescue
             puts Rainbow("Please enter a valid date.").rebeccapurple
@@ -131,7 +131,7 @@ while true
 
         # get the date from the user
         begin
-            ask_date = prompt.ask("Please enter the day for the event you want to delete [dd/mm/yyyy]", required: true)
+            ask_date = prompt.ask(Rainbow("Please enter the day for the event you want to delete [dd/mm/yyyy]").orange, required: true)
             date = DateAndTimes.get_date(ask_date)
         rescue
             puts Rainbow("Please enter a valid date.").rebeccapurple
@@ -143,11 +143,11 @@ while true
         EventInfo.list_events(array)
         
         # get details for the event to be deleted
-        title = prompt.ask("What event would you like to delete?")
+        title = prompt.ask(Rainbow("What event would you like to delete?").orange)
 
         # confirm details
-        puts "Are these the correct details?"
-        confirm = prompt.yes?("Are you sure you want to delete: #{title}?")
+        puts Rainbow("Are these the correct details?").blanchedalmond
+        confirm = prompt.yes?(Rainbow("Are you sure you want to delete: #{title}?").wheat)
 
         # delete event from csv
         if confirm == true
