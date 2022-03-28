@@ -113,7 +113,6 @@ while true
 
         # display events for that day
         EventInfo.list_events(array)
-
     when 'Delete'
         system('clear')
 

@@ -6,4 +6,4 @@ hachi:
 
 .PHONY: test
 test:
-	rspec ./spec/dateandtimes_spec.rb -f d 
+	rspec
