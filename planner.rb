@@ -46,7 +46,7 @@ today = Time.now.strftime("%d %m %y")
 # convert todays date to same format as csv file
 today_date = Date.parse(today).to_s
 # create array of todays events
-today_array = EventInfo.event_array(today_date)
+today_array = EventInfo.date_event_array(today_date)
 # display all events for today
 puts EventInfo.no_of_events(today_array)
 EventInfo.list_events(today_array)
@@ -96,6 +96,37 @@ while true
     when 'View'
         system('clear')
 
+        view = prompt.select('What would you like to view?', %w(Day Event), show_help: :always, active_colour: :yellow)
+
+        if view == 'Day'
+            begin
+                ask_date = prompt.ask(Rainbow("What day would you like to view? [dd/mm/yyyy]").orange, required: true)
+                date = DateAndTimes.get_date(ask_date)
+            rescue
+                puts Rainbow("Please enter a valid date.").rebeccapurple
+                retry
+            end
+    
+            # create array of events for that day
+            array = EventInfo.date_event_array(date)
+            
+            # display how many events for that day
+            puts EventInfo.no_of_events(array)
+    
+            # display events for that day
+            EventInfo.list_events(array)
+            next
+        elsif view == "Event"
+            ask_event = prompt.ask(Rainbow('What event would you like to view?').orange, required: true)
+
+            # create array of events with that title
+            array = EventInfo.name_event_array(ask_event)
+
+            # display events
+            EventInfo.list_events(array)
+            next
+        end
+
         # get the date from the user
         begin
             ask_date = prompt.ask(Rainbow("What day would you like to view? [dd/mm/yyyy]").orange, required: true)
@@ -106,7 +137,7 @@ while true
         end
 
         # create array of events for that day
-        array = EventInfo.event_array(date)
+        array = EventInfo.date_event_array(date)
         
         # display how many events for that day
         puts EventInfo.no_of_events(array)
@@ -126,7 +157,7 @@ while true
         end
 
         # display events for that day
-        array = EventInfo.event_array(date)
+        array = EventInfo.date_event_array(date)
         EventInfo.list_events(array)
         
         # get details for the event to be deleted
