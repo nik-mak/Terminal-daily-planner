@@ -3,7 +3,7 @@
 require 'csv'
 require_relative('./date_time')
 require_relative('./eventinfo')
-require_relative('./view_day')
+require_relative('./view')
 
 # For all file operations
 module Write

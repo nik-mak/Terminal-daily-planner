@@ -5,7 +5,7 @@ require 'date'
 # Used to find the dates and times in the right format
 module DateAndTimes
   def self.get_date(date)
-    Date.parse(date).to_s
+    v_date = Date.parse(date)
   end
 
   def self.get_time(time)

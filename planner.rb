@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+#gems
 require 'csv'
 require 'json'
 require 'date'
@@ -10,28 +11,19 @@ require 'httparty'
 # files
 require_relative('./modules/date_time')
 require_relative('./modules/eventinfo')
-require_relative('./modules/open')
-require_relative('./modules/view_day')
+require_relative('./modules/today')
+require_relative('./modules/view')
 require_relative('./modules/file_ops')
 
 prompt = TTY::Prompt.new(interrupt: :exit)
 
-def help
-  "Hachi is your daily planner right here in your terminal! You can navigate through the options with the arrow keys.
-
-  Add:      allows you to add an event you just need to specify what day, what time, and give it a name.
-  Delete:   allows you to delete an event.
-  View:     allows you to view the events of a specific day! you only need to specify the date.
-  Help:     will show you how to use this app.
-  Exit:     will close the planner.
-
-  Date can be entered as dd/mm/yyyy or just the days number and the month and year will
-  default to the current month and year.
-  All times must be entered in 24hr format."
-end
-
 ARGV.each do |arg|
-  arg.include?('-h') ? (return puts help) : next
+  if arg == '-h' || arg == '--help'
+    File.foreach('./files/help.txt') do |each|
+      puts each
+    end
+  end
+  exit
 end
 
 system('clear')
