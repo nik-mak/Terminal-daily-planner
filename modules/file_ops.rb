@@ -7,7 +7,7 @@ require_relative('./view_day')
 
 # For all file operations
 module Write
-  def self.new_event 
+  def self.new_event(date, time, title)
     CSV.open('dates.csv', 'a') { |csv| csv << [date, time, title] }
     EventInfo.sort_csv
   end

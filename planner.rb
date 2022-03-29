@@ -46,7 +46,7 @@ loop do
   option = prompt.select(Rainbow('What would you like to do?').palegoldenrod, %w[Add View Delete Help Exit], show_help: :always, active_color: :yellow)
   case option
   when 'Add'
-    # get the date from the user
+    # get the info from the user
     begin
       date = DateAndTimes.get_date(prompt.ask(Rainbow('Please enter a day [dd/mm/yyyy]').orange, required: true))
     rescue Date::Error
@@ -54,7 +54,6 @@ loop do
       retry
     end
 
-    # get the time from the user
     begin
       time = DateAndTimes.get_time(prompt.ask(Rainbow('Please enter a time? [hh:mm]').orange, required: true))
     rescue Date::Error
@@ -62,25 +61,26 @@ loop do
       retry
     end
 
-    # get the details from the user
     title = prompt.ask(Rainbow('What would you like to call this event?').orange)
 
-    # confirm all details of the event with the user
+    # confirm details of the event with the user
     puts Rainbow('Are these the correct details?').blanchedalmond
     confirm = prompt.yes?(Rainbow("date: #{date}, time: #{time}, details: #{title}").wheat)
 
     # write the event to the file
-    confirm == true ? Write.new_event : next
+    confirm == true ? Write.new_event(date, time, title) : next
   when 'View'
     view = prompt.select(Rainbow('What would you like to view?').palegoldenrod, %w[Day Event], show_help: :always, active_color: :yellow)
     case view
     when 'Day'
+      # get details from user
       begin
         date = DateAndTimes.get_date(prompt.ask(Rainbow('What day would you like to view? [dd/mm/yyyy]').orange, required: true))
       rescue Date::Error
         puts Rainbow('Please enter a valid date.').rebeccapurple
         retry
       end
+      # display events
       View.list_events_day(date)
       next
     when 'Event'
@@ -90,7 +90,6 @@ loop do
     end
   when 'Delete'
     system('clear')
-
     # get the date from the user
     begin
       date = DateAndTimes.get_date(prompt.ask(Rainbow('Enter the date of the event to delete [dd/mm/yyyy]').orange, required: true))
@@ -98,16 +97,12 @@ loop do
       puts Rainbow('Please enter a valid date.').rebeccapurple
       retry
     end
-
     # display events for that day
     View.list_events_day(date)
-
     # get details for the event to be deleted
     title = prompt.ask(Rainbow('What event would you like to delete?').orange)
-
     # confirm details
     confirm = prompt.yes?(Rainbow("Are you sure you want to delete: #{title}?").wheat)
-
     # delete event from csv
     confirm == true ? Write.delete_event(date, title) : next
   when 'Help'
