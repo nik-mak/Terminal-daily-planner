@@ -8,8 +8,10 @@ require 'rainbow'
 require 'httparty'
 
 # files
-require_relative('./date_time')
-require_relative('./eventinfo')
+require_relative('./modules/date_time')
+require_relative('./modules/eventinfo')
+require_relative('./modules/open.rb')
+require_relative('./modules/view_day.rb')
 
 prompt = TTY::Prompt.new(interrupt: :exit)
 
@@ -35,24 +37,9 @@ system('clear')
 
 # welcome message
 puts Rainbow('Hachi v1.0').goldenrod
-
-# todays date
 puts Rainbow("Today is #{Time.now.strftime('%A, %d of %B')}").goldenrod
-
-# fetch todays date
-today = Time.now.strftime('%d %m %y')
-# convert todays date to same format as csv file
-today_date = Date.parse(today).to_s
-# create array of todays events
-today_array = EventInfo.date_event_array(today_date)
-# display all events for today
-today_array.empty? ? (puts Rainbow('There are no events.').rebeccapurple) : (puts EventInfo.no_of_events(today_array))
-EventInfo.list_events(today_array)
-
-# fetch proverb
-response = HTTParty.get('https://zenquotes.io/api/random')
-result = JSON.parse(response.body)[0]
-puts Rainbow("#{result['q']} - #{result['a']}").lightcoral
+Today.prog_open
+Today.proverb
 
 loop do
   option = prompt.select(Rainbow('What would you like to do?').palegoldenrod, %w[Add View Delete Help Exit],
@@ -95,8 +82,8 @@ loop do
     system('clear')
 
     view = prompt.select(Rainbow('What would you like to view?').palegoldenrod, %w[Day Event],
-                          show_help: :always,
-                          active_color: :yellow)
+                         show_help: :always,
+                         active_color: :yellow)
 
     case view
     when 'Day'
@@ -106,43 +93,13 @@ loop do
         puts Rainbow('Please enter a valid date.').rebeccapurple
         retry
       end
-
-      # create array of events for that day
-      array = EventInfo.date_event_array(date)
-
-      # display how many events for that day
-      array.empty? ? (puts Rainbow('There are no events.').rebeccapurple) : (puts EventInfo.no_of_events(array))
-
-      # display events for that day
-      EventInfo.list_events(array)
+      View.list_events_day(date)
       next
     when 'Event'
-      ask_event = prompt.ask(Rainbow('What event would you like to view?').orange, required: true)
-
-      # create array of events with that title
-      array = EventInfo.name_event_array(ask_event)
-
-      # display events
-      array.empty? ? (puts Rainbow('There are no events with that name.').rebeccapurple) : EventInfo.list_events(array)
+      event = prompt.ask(Rainbow('What event would you like to view?').orange, required: true)
+      View.list_events_name(event)
       next
     end
-
-    # get the date from the user
-    begin
-      date = DateAndTimes.get_date(prompt.ask(Rainbow('What day would you like to view? [dd/mm/yyyy]').orange, required: true))
-    rescue Date::Error
-      puts Rainbow('Please enter a valid date.').rebeccapurple
-      retry
-    end
-
-    # create array of events for that day
-    array = EventInfo.date_event_array(date)
-
-    # display how many events for that day
-    array.empty? ? (puts Rainbow('There are no events.').rebeccapurple) : (puts EventInfo.no_of_events(array))
-
-    # display events for that day
-    EventInfo.list_events(array)
   when 'Delete'
     system('clear')
 
@@ -156,25 +113,16 @@ loop do
     end
 
     # display events for that day
-    array = EventInfo.date_event_array(date)
-    EventInfo.list_events(array)
+    View.list_events_day(date)
 
-    if array.empty?
-      puts Rainbow('There are no events.').rebeccapurple
-      next
-    else
-      # get details for the event to be deleted
-      title = prompt.ask(Rainbow('What event would you like to delete?').orange)
+    # get details for the event to be deleted
+    title = prompt.ask(Rainbow('What event would you like to delete?').orange)
 
-      # confirm details
-      puts Rainbow('Are these the correct details?').blanchedalmond
-      confirm = prompt.yes?(Rainbow("Are you sure you want to delete: #{title}?").wheat)
+    # confirm details
+    confirm = prompt.yes?(Rainbow("Are you sure you want to delete: #{title}?").wheat)
 
-      # delete event from csv
-      if confirm == true
-        EventInfo.delete_event(date, title)
-      end
-    end
+    # delete event from csv
+    confirm == true ? EventInfo.delete_event(date, title) : next
   when 'Help'
     system('clear')
     puts help
