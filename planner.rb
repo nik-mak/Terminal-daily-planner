@@ -10,8 +10,9 @@ require 'httparty'
 # files
 require_relative('./modules/date_time')
 require_relative('./modules/eventinfo')
-require_relative('./modules/open.rb')
-require_relative('./modules/view_day.rb')
+require_relative('./modules/open')
+require_relative('./modules/view_day')
+require_relative('./modules/file_ops')
 
 prompt = TTY::Prompt.new(interrupt: :exit)
 
@@ -42,14 +43,9 @@ Today.prog_open
 Today.proverb
 
 loop do
-  option = prompt.select(Rainbow('What would you like to do?').palegoldenrod, %w[Add View Delete Help Exit],
-                         show_help: :always,
-                         active_color: :yellow)
-
+  option = prompt.select(Rainbow('What would you like to do?').palegoldenrod, %w[Add View Delete Help Exit], show_help: :always, active_color: :yellow)
   case option
   when 'Add'
-    system('clear')
-
     # get the date from the user
     begin
       date = DateAndTimes.get_date(prompt.ask(Rainbow('Please enter a day [dd/mm/yyyy]').orange, required: true))
@@ -74,17 +70,9 @@ loop do
     confirm = prompt.yes?(Rainbow("date: #{date}, time: #{time}, details: #{title}").wheat)
 
     # write the event to the file
-    if confirm == true
-      CSV.open('dates.csv', 'a') { |csv| csv << [date, time, title] }
-      EventInfo.sort_csv
-    end
+    confirm == true ? Write.new_event : next
   when 'View'
-    system('clear')
-
-    view = prompt.select(Rainbow('What would you like to view?').palegoldenrod, %w[Day Event],
-                         show_help: :always,
-                         active_color: :yellow)
-
+    view = prompt.select(Rainbow('What would you like to view?').palegoldenrod, %w[Day Event], show_help: :always, active_color: :yellow)
     case view
     when 'Day'
       begin
@@ -105,8 +93,7 @@ loop do
 
     # get the date from the user
     begin
-      date = DateAndTimes.get_date(prompt.ask(Rainbow('Enter the date of the event to delete [dd/mm/yyyy]').orange,
-                                              required: true))
+      date = DateAndTimes.get_date(prompt.ask(Rainbow('Enter the date of the event to delete [dd/mm/yyyy]').orange, required: true))
     rescue Date::Error
       puts Rainbow('Please enter a valid date.').rebeccapurple
       retry
@@ -122,12 +109,10 @@ loop do
     confirm = prompt.yes?(Rainbow("Are you sure you want to delete: #{title}?").wheat)
 
     # delete event from csv
-    confirm == true ? EventInfo.delete_event(date, title) : next
+    confirm == true ? Write.delete_event(date, title) : next
   when 'Help'
-    system('clear')
     puts help
   when 'Exit'
-    system('clear')
     return
   end
 end

@@ -30,14 +30,6 @@ module EventInfo
     end
   end
 
-  def self.delete_event(date, title)
-    File.open('dates.csv') do |file|
-      table = CSV.parse(file, headers: true)
-      table.delete_if { |row| (row['title'] == title) && (row['date'] == date) }
-      File.write('dates.csv', table.to_csv)
-    end
-  end
-
   def self.sort_csv
     rows = []
     CSV.foreach('dates.csv', headers: true) do |row|
