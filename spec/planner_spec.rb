@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 require './modules/date_time'
+require './modules/eventinfo'
+require './modules/write'
+
 
 describe DateAndTimes do
   describe '#get_date' do
@@ -17,6 +20,14 @@ describe DateAndTimes do
     end
     it 'should return an error for invalid time' do
       expect { DateAndTimes.get_time('a:30') }.to raise_error(Date::Error)
+    end
+  end
+end
+
+describe EventInfo do
+  describe '#no_of_events' do
+    it 'should retrun the number of events on that day' do
+      expect(EventInfo.no_of_events(%w[a b c])).to eq 'You have 3 events!'
     end
   end
 end

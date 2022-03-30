@@ -21,7 +21,7 @@ module EventInfo
   end
 
   def self.no_of_events(array)
-    Rainbow("You have #{array.length} events!").orange
+    "You have #{array.length} events!"
   end
 
   def self.list_events(array)

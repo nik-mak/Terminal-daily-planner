@@ -22,6 +22,7 @@ ARGV.each do |arg|
     File.foreach('./files/help.txt') do |each|
       puts each
     end
+  elsif arg == ''
   end
   exit
 end
@@ -31,7 +32,7 @@ system('clear')
 # welcome message
 puts Rainbow('Hachi v1.0').goldenrod
 puts Rainbow("Today is #{Time.now.strftime('%A, %d of %B')}").goldenrod
-Today.prog_open
+Rainbow(Today.prog_open).orange
 Today.proverb
 
 loop do
