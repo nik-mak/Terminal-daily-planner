@@ -13,7 +13,7 @@ require_relative('./modules/date_time')
 require_relative('./modules/eventinfo')
 require_relative('./modules/today')
 require_relative('./modules/view')
-require_relative('./modules/file_ops')
+require_relative('./modules/write')
 
 prompt = TTY::Prompt.new(interrupt: :exit)
 
@@ -22,7 +22,8 @@ ARGV.each do |arg|
     File.foreach('./files/help.txt') do |each|
       puts each
     end
-  elsif arg == ''
+  elsif arg == '-v' || arg == '--version'
+    puts "Hachi version 1.0"
   end
   exit
 end
