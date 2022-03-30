@@ -1,6 +1,5 @@
-# frozen_string_literal: true
-
 require 'csv'
+
 require_relative('./date_time')
 require_relative('./eventinfo')
 require_relative('./view')

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'csv'
 
 # Used to manipulate the csv file to exract the data.

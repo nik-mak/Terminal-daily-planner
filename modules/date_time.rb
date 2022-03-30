@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require 'date'
 
 # Used to find the dates and times in the right format

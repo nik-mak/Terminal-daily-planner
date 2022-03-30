@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 require './modules/date_time'
 require './modules/eventinfo'
 require './modules/write'
