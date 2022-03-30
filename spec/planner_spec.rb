@@ -21,11 +21,3 @@ describe DateAndTimes do
     end
   end
 end
-
-describe EventInfo do
-  describe '#no_of_events' do
-    it 'should retrun the number of events on that day' do
-      expect(EventInfo.no_of_events(%w[a b c])).to eq 'You have 3 events!'
-    end
-  end
-end

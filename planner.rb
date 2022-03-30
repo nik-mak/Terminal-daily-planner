@@ -3,6 +3,7 @@ require 'csv'
 require 'json'
 require 'date'
 require 'tty-prompt'
+require 'tty-font'
 require 'rainbow'
 require 'httparty'
 
@@ -30,7 +31,8 @@ end
 system('clear')
 
 # welcome message
-puts Rainbow('Hachi v1.0').goldenrod
+font = TTY::Font.new(:doom)
+puts Rainbow(font.write('Hachi')).goldenrod
 puts Rainbow("Today is #{Time.now.strftime('%A, %d of %B')}").goldenrod
 Today.prog_open
 puts Today.proverb
