@@ -1,7 +1,9 @@
-# gems
+# internal gems
 require 'csv'
 require 'json'
 require 'date'
+
+# external gems
 require 'tty-prompt'
 require 'tty-font'
 require 'rainbow'
