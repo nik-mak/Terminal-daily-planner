@@ -9,7 +9,7 @@ require_relative('./eventinfo')
 module View
   def self.list_events_day(date)
     array = EventInfo.date_event_array(date)
-    array.empty? ? (puts Rainbow('There are no events.').rebeccapurple) : (puts EventInfo.no_of_events(array))
+    array.empty? ? (puts Rainbow('There are no events.').rebeccapurple) : (puts Rainbow(EventInfo.no_of_events(array)).orange)
     EventInfo.list_events(array)
   end
 

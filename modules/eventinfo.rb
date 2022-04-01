@@ -8,18 +8,20 @@ module EventInfo
     csv.select do |row|
       row['date'] == date ? (array << row.to_h) : next
     end
+    return array
   end
 
-  def self.name_event_array(name)
+  def self.name_event_array(title)
     array = []
     csv = CSV.open('dates.csv', 'r', headers: true)
     csv.select do |row|
-      row['title'] == name ? (array << row.to_h) : next
+      row['title'] == title ? (array << row.to_h) : next
     end
+    return array
   end
 
   def self.no_of_events(array)
-    Rainbow("You have #{array.length} events!").orange
+    return "You have #{array.length} events!"
   end
 
   def self.list_events(array)
