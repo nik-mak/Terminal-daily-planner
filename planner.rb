@@ -3,12 +3,11 @@ require_relative './views/planner_view'
 require_relative './controllers/planner_controller'
 
 ARGV.each do |arg|
-  case arg
-  when '-h' || '--help'
+  if arg == '-h' || arg == '--help'
     File.foreach('./files/help.txt') do |each|
       puts each
     end
-  when '-v' || '--version'
+  elsif arg == '-v' || arg == '--version'
     puts 'Hachi version 2.0'
   end
   exit

@@ -1,6 +1,8 @@
 require_relative './../models/enums'
 require 'tty-prompt'
+require 'tty-font'
 require 'httparty'
+
 
 class EventView
   def initialize(event_model)
