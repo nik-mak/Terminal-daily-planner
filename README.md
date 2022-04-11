@@ -1,5 +1,5 @@
 # Hachi - Terminal Daily Planner - T1A3
-Hachi is a daily planner within the terminal. This application allows you to add, view and delete events. You only need to have the events details to enter and you are done!
+Hachi is a daily planner within the terminal. This application allows you to add, view, find, and delete events. You only need to have the events details to enter and you are done!
 ## Repository
 Github: https://github.com/nik-mak/hachi
 Project Board: https://github.com/users/nik-mak/projects/1
@@ -8,8 +8,11 @@ Rubocop: https://github.com/rubocop/ruby-style-guide
 ## Features
 ### Add
 This allows you to add new events to your planner. The on-screen instructions will prompt you to provide a date, time, and title for the event. It will then get you to confirm the details before saving.
-### View
-This allows you to view your events. You have the options of viewing the events by day, where you will need to provide the date, or by title.
+### View Day
+This allows you to view your events for a given day.
+
+### Find Event
+This allows you to find the events with a given title.
 ### Delete
 This allows you to delete an event. It will prompt you provide a day and it will list the events you have on that day. You will then need to provide the title for the event and confirm you want to delete it.
 ### Proverb
