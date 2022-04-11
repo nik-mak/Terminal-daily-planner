@@ -2,15 +2,14 @@ Welcome to Hachi!
 Hachi is your daily planner right here in your terminal!
 
 Upon opening the app you will be presented with todays date, all events for today and a proverb to get you going!
-
 The options can be navigated with your arrow keys. You have the option to:
 
-Add:      allows you to add an event you just need to specify what day, what time, and give it a name.
-Delete:   allows you to delete an event.
-View:     allows you to view details of an event. You can view the events of a specific day or find an event with just its name!
-Help:     will show you how to use this app.
-Exit:     will close the planner.
+Add:          allows you to add an event you just need to specify what day, what time, and give it a title.
+View Day:     allows you to view the events for a specified day.
+Find Event:   allows you to find an event by its title.
+Delete Event: allows you to delete all events for a given date and title.
+Help:         will show you how to use this app.
+Exit:         will close the planner.
 
-Date can be entered as dd/mm/yyyy or just the days number and the month and year will
-default to the current month and year.
+Date can be entered as dd/mm/yyyy. If no date is entered, it will default to the current date.
 All times must be entered in 24hr format.
